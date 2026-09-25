@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Members | Runway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;1,6..96,500&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body class="member-shell">
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../">Runway</a>
+    <span class="nav-meta" id="who-label">Members</span>
+    <nav class="nav-links">
+      <a href="../">Public site</a>
+      <button class="button ghost" id="signout" type="button" hidden>Sign out</button>
+    </nav>
+  </div>
+</header>
+<main>
+  <section id="gate" class="auth-card">
+    <p class="kicker">Members</p>
+    <h1 id="gate-title">The desk.</h1>
+    <p>Talent keep a living card. Agencies browse the book and request a hold.</p>
+    <div class="hero-actions" style="margin:18px 0 22px">
+      <button class="button small" id="pick-talent" type="button">I am talent</button>
+      <button class="button ghost small" id="pick-agency" type="button">I book talent</button>
+    </div>
+    <form id="auth-form">
+      <input type="hidden" id="account-type" value="talent">
+      <div class="field" style="margin-bottom:10px"><label for="email">Email</label><input class="control" id="email" type="email" required></div>
+      <div class="field" style="margin-bottom:10px"><label for="password">Password</label><input class="control" id="password" type="password" minlength="6" required></div>
+      <div class="field" style="margin-bottom:16px"><label for="display-name">Name / company</label><input class="control" id="display-name" maxlength="120"></div>
+      <div class="form-actions">
+        <button class="button ghost" id="do-signup" type="button">Create account</button>
+        <button class="button" type="submit">Sign in</button>
+      </div>
+      <p class="form-status" id="auth-status" role="status"></p>
+    </form>
+  </section>
+  <section id="talent-app" class="wrap dash" hidden>
+    <div class="dash-head"><div><p class="kicker">Talent studio</p><h1>Your card</h1></div></div>
+    <p class="notice">The card stays off the book until you tick “List me”. Agencies never see an unlisted profile.</p>
+    <form id="talent-profile" class="sheet">
+      <section class="form-step">
+        <div class="field"><label for="t-name">Full name</label><input class="control" id="t-name" required></div>
+        <div class="field"><label for="t-pref">Preferred name</label><input class="control" id="t-pref"></div>
+        <div class="field"><label for="t-city">City</label><input class="control" id="t-city" required></div>
+        <div class="field"><label for="t-age">Age band</label><select class="control" id="t-age"><option>18-24</option><option>25-34</option><option>35-44</option><option>45-54</option><option>55+</option></select></div>
+        <div class="field"><label for="t-pres">Presentation</label><input class="control" id="t-pres" placeholder="e.g. androgynous, classic"></div>
+        <div class="field"><label for="t-lang">Languages</label><input class="control" id="t-lang"></div>
+        <div class="field"><label for="t-exp">Experience</label><select class="control" id="t-exp"><option value="none">New</option><option value="extras">Extras</option><option value="principal">Principal</option></select></div>
+        <div class="field"><label for="t-height">Height cm</label><input class="control" id="t-height" type="number" min="120" max="220"></div>
+        <div class="field"><label for="t-size">Size</label><input class="control" id="t-size"></div>
+        <div class="field"><label for="t-avail">Availability</label><select class="control" id="t-avail"><option value="weekdays">Weekdays</option><option value="nights">Nights</option><option value="last_minute">Last minute</option></select></div>
+        <div class="field"><label for="t-wa">WhatsApp</label><input class="control" id="t-wa"></div>
+        <div class="field wide"><label for="t-photo">Headshot URL</label><input class="control" id="t-photo" type="url" placeholder="https://"></div>
+        <div class="field wide"><label for="t-port">Portfolio URL</label><input class="control" id="t-port" type="url"></div>
+        <div class="field wide"><label for="t-bio">Bio</label><textarea class="control" id="t-bio"></textarea></div>
+        <fieldset class="field wide"><legend class="legend">Categories</legend>
+          <div class="choice-grid">
+            <div class="choice"><input id="tc-bg" type="checkbox" value="background"><label for="tc-bg">Background</label></div>
+            <div class="choice"><input id="tc-rw" type="checkbox" value="runway"><label for="tc-rw">Runway</label></div>
+            <div class="choice"><input id="tc-co" type="checkbox" value="commercial"><label for="tc-co">Commercial</label></div>
+            <div class="choice"><input id="tc-se" type="checkbox" value="series"><label for="tc-se">Series</label></div>
+            <div class="choice"><input id="tc-fi" type="checkbox" value="film"><label for="tc-fi">Film</label></div>
+          </div>
+        </fieldset>
+        <div class="choice field wide"><input id="t-listed" type="checkbox"><label for="t-listed">List me on the book</label></div>
+      </section>
+      <div class="form-actions"><button class="button" type="submit">Save card</button></div>
+      <p class="form-status" id="talent-status"></p>
+    </form>
+    <h2 style="margin:40px 0 14px">Hold requests</h2>
+    <div id="talent-bookings"></div>
+  </section>
+  <section id="agency-app" class="wrap dash" hidden>
+    <div class="dash-head"><div><p class="kicker">Agency book</p><h1>Faces</h1></div></div>
+    <div class="filters" id="filters">
+      <button type="button" data-cat="" class="on">All</button>
+      <button type="button" data-cat="background">Background</button>
+      <button type="button" data-cat="runway">Runway</button>
+      <button type="button" data-cat="commercial">Commercial</button>
+      <button type="button" data-cat="series">Series</button>
+      <button type="button" data-cat="film">Film</button>
+      <select id="city-filter" aria-label="City filter"><option value="">All cities</option></select>
+    </div>
+    <p class="form-status" id="book-status"></p>
+    <div class="grid-book" id="book-grid"></div>
+    <h2 style="margin:40px 0 14px">Your holds</h2>
+    <div id="agency-bookings"></div>
+  </section>
+</main>
+<div class="dialog-backdrop" id="hold-modal" hidden>
+  <div class="dialog" role="dialog" aria-labelledby="hold-title">
+    <div class="dialog-head">
+      <h2 id="hold-title">Request hold</h2>
+      <button class="button ghost small" id="hold-close" type="button">Close</button>
+    </div>
+    <form class="dialog-body" id="hold-form">
+      <p class="notice" id="hold-who"></p>
+      <div class="field"><label for="hold-title-input">Working title</label><input class="control" id="hold-title-input" required></div>
+      <div class="field"><label for="hold-dates">Dates / city</label><input class="control" id="hold-dates"></div>
+      <div class="field"><label for="hold-note">Note to talent</label><textarea class="control" id="hold-note"></textarea></div>
+      <div class="form-actions"><button class="button" type="submit">Send hold</button></div>
+      <p class="form-status" id="hold-status"></p>
+    </form>
+  </div>
+</div>
+<script type="module" src="../assets/js/members.js"></script>
+</body>
+</html>
