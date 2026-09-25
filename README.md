@@ -1,39 +1,21 @@
 # Runway
 
-Casting intake for **Runway** — background actors, runway models, and talent for series, film and commercials.
+Editorial casting agency site for extras, runway models, and on-camera talent.
 
-Same operating model as Exchange Line: the public site collects requirements in plain language. It does not publish rates, guarantee bookings, or let productions browse the full book. Runway confirms the brief, then shortlists.
+Public site: lookbook + production brief.
+Members: talent profiles and an agency book with hold requests.
 
-Live homepage (enable GitHub Pages on `main` / root):
+Uses the same Supabase project as Exchange Line. Runway data lives in separate `runway_*` tables so phone leads stay untouched.
 
 https://iederees-create.github.io/runway/
+https://iederees-create.github.io/runway/members/
 
-## Public journeys
+## One-time database step
 
-- **Casting / production** — describe the job, headcount, dates and look. Submit a brief.
-- **Talent** — join the book (18+ only). Selection is not guaranteed.
+In the Exchange Line Supabase SQL editor, run `db/010_runway.sql`. Until that runs, Members and brief saves will error.
 
-Both paths: Team-style stepper → review → save → optional WhatsApp preview before send.
+## Accounts
 
-## What's here
-
-- `index.html` — landing page and both intake forms
-- `assets/` — CSS and front-end logic
-- `privacy/` — POPIA-oriented notice
-- `db/schema.sql` — `briefs` and `talent` tables with RLS notes
-
-## Public quote / rate policy
-
-The public site does not expose day rates, agency fees or calculated estimates. Productions describe the shoot. Talent describe themselves. Runway confirms fit privately.
-
-## Stack
-
-Dependency-free HTML/CSS/JavaScript. Optional Supabase later (`assets/js/config.js`). Until keys are set, submissions stay on-device and can still open a reviewed WhatsApp message.
-
-## Configure
-
-Edit `assets/js/config.js`:
-
-- `whatsAppRecipient` — international number, no `+` (example: `27…`)
-- `supabaseUrl` / `supabaseAnonKey` / `edgeFunctionUrl` when the database is ready
-- `submissionMode`: `local` (default) or `edge-function`
+- Talent sign up in Members, edit a card, and tick **List me on the public book**.
+- Agencies sign up in Members, filter listed talent, and request a hold.
+- Talent accept or decline inside their studio.
