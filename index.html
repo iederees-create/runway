@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Runway | Casting for extras, models and on-camera talent</title>
+  <meta name="description" content="Productions submit a brief. Talent join the book. Runway shortlists. No public rates and no guaranteed bookings.">
+  <meta name="theme-color" content="#12151a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="./"><span class="brand-dot"></span>Runway</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#fit">Who this is for</a>
+      <a href="privacy/">Privacy</a>
+      <a class="nav-cta" href="#doors">Get started</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Casting - South Africa</p>
+      <h1>Get the right faces <em>in front of camera.</em></h1>
+      <p class="lede">Productions tell us the brief. Talent join the book. We shortlist. You do not scroll hundreds of profiles hoping luck happens.</p>
+      <div class="hero-actions">
+        <a class="button" href="#brief">Submit a casting brief</a>
+        <a class="button secondary" href="#book">Join the book</a>
+      </div>
+      <div class="doors" id="doors">
+        <article class="card door">
+          <h3>Casting / production</h3>
+          <p>Describe the shoot, the look and how many people you need. Runway confirms the brief before anyone is sent.</p>
+          <a class="button" href="#brief">Open brief form</a>
+        </article>
+        <article class="card door">
+          <h3>Talent</h3>
+          <p>Background, runway, commercial, series or film. Join the book. Selection is not guaranteed.</p>
+          <a class="button secondary" href="#book">Open talent form</a>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section id="fit">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Who this is for</p>
+        <h2>Productions that need people, and people who want to be selected.</h2>
+        <p>Runway is built for South African shoots that need extras, runway models, or on-camera talent. We do not publish day rates or agency fees on this site.</p>
+      </div>
+      <div class="cards">
+        <article class="card"><h3>Background / extras</h3><p>Crowd, restaurant, street and commercial extra calls with a clear headcount.</p></article>
+        <article class="card"><h3>Runway and fittings</h3><p>Show, lookbook and fitting work where measurements and walk matter.</p></article>
+        <article class="card"><h3>Series, film, commercials</h3><p>Principal and featured roles. Self-tape and availability confirmed before a name is sent.</p></article>
+      </div>
+    </div>
+  </section>
+  <section id="brief">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Casting brief</p>
+        <h2>Tell us what you need on set.<br>We will map a shortlist.</h2>
+        <p>Describe the job in plain language. No public price is calculated.</p>
+      </div>
+      <div class="board-frame">
+        <div class="board-label"><strong>STEP 1 - HOW MANY PEOPLE</strong><span class="count" id="board-count">No headcount selected yet</span></div>
+        <p class="board-caption">How many talent do you need on set? Select the last tile you need - choosing 12 selects 12 people.</p>
+        <div class="board" id="board" role="radiogroup" aria-label="Number of talent needed"></div>
+        <p class="board-selection" id="selection-summary">Choose a headcount to begin.</p>
+        <div class="facts">
+          <div class="fact"><strong>One tile per person</strong>Count speaking roles and extras separately if the look differs.</div>
+          <div class="fact"><strong>Dates before names</strong>Tell us when you shoot. We check availability after the brief is clear.</div>
+          <div class="fact"><strong>We confirm the brief</strong>You describe the look. You do not search the full book.</div>
+        </div>
+        <p class="fit-note" id="fit-message" hidden></p>
+      </div>
+      <div class="panel" style="margin-top:24px">
+        <ol class="steps" id="brief-steps" aria-label="Brief progress">
+          <li class="active">1. Project</li><li>2. Need</li><li>3. Contact</li><li>4. Review</li>
+        </ol>
+        <form id="brief-form" novalidate>
+          <section class="form-step" data-step="0">
+            <h3 class="wide">The project</h3>
+            <div class="field wide"><div class="range-row"><label for="headcount">People needed</label><output id="headcount-val" for="headcount">1</output></div><input id="headcount" name="headcount" type="range" min="1" max="100" value="1"></div>
+            <div class="field"><label for="project-type">Project type</label><select class="control" id="project-type" name="project_type" required><option value="commercial">Commercial</option><option value="series">Series</option><option value="film">Film</option><option value="runway">Runway / fitting</option><option value="stills">Stills</option><option value="other">Other</option></select></div>
+            <div class="field"><label for="working-title">Working title</label><input class="control" id="working-title" name="working_title" maxlength="160" required></div>
+            <div class="field"><label for="city">Shoot city</label><input class="control" id="city" name="city" maxlength="80" required></div>
+            <div class="field"><label for="location-count">Shoot locations</label><input class="control" id="location-count" name="location_count" type="number" min="1" max="50" value="1" required></div>
+            <div class="field wide"><label for="dates-notes">Dates or hold dates</label><input class="control" id="dates-notes" name="dates_notes" maxlength="200" required placeholder="For example: 14-16 October, Cape Town"></div>
+            <div class="field wide"><label for="pay-type">Engagement type</label><select class="control" id="pay-type" name="pay_type" required><option value="paid">Paid</option><option value="spec">Spec / usage to be confirmed</option><option value="tfp">TFP</option><option value="not_sure">Not sure yet</option></select></div>
+          </section>
+          <section class="form-step" data-step="1" hidden>
+            <h3 class="wide">Who you need</h3>
+            <fieldset class="field wide"><legend class="legend">Choose every category that applies</legend>
+              <div class="choice-grid">
+                <div class="choice"><input id="n-bg" name="needs" type="checkbox" value="background"><label for="n-bg">Background extras</label></div>
+                <div class="choice"><input id="n-runway" name="needs" type="checkbox" value="runway"><label for="n-runway">Runway / fitting</label></div>
+                <div class="choice"><input id="n-principal" name="needs" type="checkbox" value="principal"><label for="n-principal">Principal actor</label></div>
+                <div class="choice"><input id="n-featured" name="needs" type="checkbox" value="featured"><label for="n-featured">Featured / commercial</label></div>
+                <div class="choice"><input id="n-selftape" name="needs" type="checkbox" value="self_tape"><label for="n-selftape">Self-tape required</label></div>
+                <div class="choice"><input id="n-union" name="needs" type="checkbox" value="union"><label for="n-union">Union preference</label></div>
+                <div class="choice"><input id="n-wardrobe" name="needs" type="checkbox" value="own_wardrobe"><label for="n-wardrobe">Own wardrobe</label></div>
+                <div class="choice"><input id="n-unsure" name="needs" type="checkbox" value="not_sure"><label for="n-unsure">Not sure</label></div>
+              </div>
+            </fieldset>
+            <div class="field wide"><label for="look">Look and job in plain language</label><textarea class="control" id="look" name="look_description" maxlength="1500" required placeholder="Age range, presentation, wardrobe, what they do on camera."></textarea></div>
+          </section>
+          <section class="form-step" data-step="2" hidden>
+            <h3 class="wide">How should we respond?</h3>
+            <div class="field"><label for="brief-name">Contact name</label><input class="control" id="brief-name" name="contact_name" maxlength="120" required></div>
+            <div class="field"><label for="brief-company">Production / company</label><input class="control" id="brief-company" name="company_name" maxlength="160" required></div>
+            <div class="field"><label for="brief-role">Your role</label><input class="control" id="brief-role" name="role" maxlength="100" required placeholder="Casting director, producer, brand"></div>
+            <div class="field"><label for="brief-email">Work email</label><input class="control" id="brief-email" name="email" type="email" maxlength="254" required></div>
+            <div class="field"><label for="brief-wa">WhatsApp (optional)</label><input class="control" id="brief-wa" name="whatsapp" type="tel" maxlength="40"></div>
+            <div class="field"><label for="brief-timeline">Decision timeline</label><select class="control" id="brief-timeline" name="decision_timeline" required><option value="researching">Just researching</option><option value="month">This month</option><option value="week">This week</option><option value="asap">Shooting this week</option></select></div>
+            <div class="field"><label for="brief-method">Preferred contact</label><select class="control" id="brief-method" name="preferred_contact" required><option value="email">Email</option><option value="whatsapp">WhatsApp</option><option value="conversation">Request a conversation</option></select></div>
+            <div class="field"><label for="brief-when">Preferred response time</label><input class="control" id="brief-when" name="preferred_response_time" maxlength="100" required></div>
+            <div class="honeypot" aria-hidden="true"><label for="brief-website">Leave empty</label><input id="brief-website" name="website" tabindex="-1" autocomplete="off"></div>
+            <p class="privacy-copy wide">Used to respond to this brief only. See the <a href="privacy/">privacy notice</a>.</p>
+          </section>
+          <section class="form-step" data-step="3" hidden>
+            <h3 class="wide">Review the brief</h3>
+            <div class="wide"><ul class="review-list" id="brief-review"></ul><button class="button secondary small" id="brief-edit" type="button">Edit answers</button></div>
+          </section>
+          <div class="form-actions">
+            <button class="button secondary" id="brief-prev" type="button" hidden>Back</button>
+            <button class="button" id="brief-next" type="button">Continue</button>
+            <button class="button" id="brief-submit" type="submit" hidden>Submit casting brief</button>
+          </div>
+          <div class="form-status" id="brief-status" role="status"></div>
+        </form>
+        <section class="health-summary" id="brief-done" tabindex="-1" hidden>
+          <p class="eyebrow">Brief received</p>
+          <h2>Thank you - we will confirm the brief before names go out.</h2>
+          <div class="cards">
+            <article class="card"><h3>What you asked for</h3><ul class="summary-list" id="brief-summary"></ul></article>
+            <article class="card"><h3>To confirm</h3><ul class="risk-list" id="brief-risks"></ul></article>
+            <article class="card"><h3>Next step</h3><p>Runway checks dates, look and engagement type, then sends a shortlist.</p></article>
+          </div>
+          <button class="button" id="brief-wa-btn" type="button">Review this brief in WhatsApp</button>
+        </section>
+      </div>
+    </div>
+  </section>
+  <section id="book">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Talent book</p>
+        <h2>Join the book.<br>Be selectable.</h2>
+        <p>18+ only. This is a roster card, not a job offer.</p>
+      </div>
+      <div class="panel">
+        <ol class="steps" id="talent-steps"><li class="active">1. You</li><li>2. Bookable</li><li>3. Contact</li><li>4. Review</li></ol>
+        <form id="talent-form" novalidate>
+          <section class="form-step" data-step="0">
+            <h3 class="wide">You</h3>
+            <fieldset class="field wide"><legend class="legend">What you book for</legend>
+              <div class="choice-grid">
+                <div class="choice"><input id="c-bg" name="categories" type="checkbox" value="background"><label for="c-bg">Background</label></div>
+                <div class="choice"><input id="c-runway" name="categories" type="checkbox" value="runway"><label for="c-runway">Runway</label></div>
+                <div class="choice"><input id="c-commercial" name="categories" type="checkbox" value="commercial"><label for="c-commercial">Commercial</label></div>
+                <div class="choice"><input id="c-series" name="categories" type="checkbox" value="series"><label for="c-series">Series</label></div>
+                <div class="choice"><input id="c-film" name="categories" type="checkbox" value="film"><label for="c-film">Film</label></div>
+              </div>
+            </fieldset>
+            <div class="field"><label for="full-name">Full name</label><input class="control" id="full-name" name="full_name" maxlength="120" required></div>
+            <div class="field"><label for="pref-name">Preferred name</label><input class="control" id="pref-name" name="preferred_name" maxlength="80"></div>
+            <div class="field"><label for="talent-city">City you work from</label><input class="control" id="talent-city" name="city" maxlength="80" required></div>
+            <div class="field"><label for="age-band">Age band</label><select class="control" id="age-band" name="age_band" required><option value="18-24">18-24</option><option value="25-34">25-34</option><option value="35-44">35-44</option><option value="45-54">45-54</option><option value="55+">55+</option></select></div>
+            <div class="field"><label for="presentation">Presentation</label><input class="control" id="presentation" name="presentation" maxlength="80" required></div>
+            <div class="field"><label for="languages">Languages</label><input class="control" id="languages" name="languages" maxlength="160" required></div>
+            <div class="field wide"><label for="experience">Experience</label><select class="control" id="experience" name="experience_level" required><option value="none">No set experience yet</option><option value="student">Student / training</option><option value="extras">Booked extras</option><option value="principal">Principal / featured</option></select></div>
+          </section>
+          <section class="form-step" data-step="1" hidden>
+            <h3 class="wide">Bookable facts</h3>
+            <div class="field"><label for="height">Height (cm)</label><input class="control" id="height" name="height_cm" type="number" min="120" max="220"></div>
+            <div class="field"><label for="size-band">Clothing size band</label><input class="control" id="size-band" name="size_band" maxlength="40"></div>
+            <div class="field"><label for="tattoos">Visible tattoos or piercings</label><select class="control" id="tattoos" name="tattoos_piercings"><option value="none">None visible</option><option value="some">Some</option><option value="many">Many / a feature of my look</option></select></div>
+            <div class="field"><label for="has-id">Valid SA ID or passport</label><select class="control" id="has-id" name="has_id" required><option value="yes">Yes</option><option value="no">No</option></select></div>
+            <div class="field"><label for="transport">Reliable transport to set</label><select class="control" id="transport" name="has_transport" required><option value="yes">Yes</option><option value="no">No</option></select></div>
+            <div class="field"><label for="availability">Availability</label><select class="control" id="availability" name="availability" required><option value="weekdays">Weekdays</option><option value="nights">Nights / weekends</option><option value="last_minute">Last-minute</option><option value="limited">Limited</option></select></div>
+            <div class="field wide"><label for="portfolio">Portfolio URL (optional)</label><input class="control" id="portfolio" name="portfolio_url" type="url" maxlength="300"></div>
+            <div class="field wide"><label for="union">Union</label><select class="control" id="union" name="union_status"><option value="none">None</option><option value="sage">SAGE</option><option value="other">Other</option></select></div>
+          </section>
+          <section class="form-step" data-step="2" hidden>
+            <h3 class="wide">Contact and consent</h3>
+            <div class="field"><label for="talent-email">Email</label><input class="control" id="talent-email" name="email" type="email" required></div>
+            <div class="field"><label for="talent-wa">WhatsApp</label><input class="control" id="talent-wa" name="whatsapp" type="tel" required></div>
+            <fieldset class="field wide"><legend class="legend">Required permissions</legend>
+              <div class="choice-grid">
+                <div class="choice"><input id="age-ok" name="is_adult" type="checkbox" value="yes" required><label for="age-ok">I am 18 or older</label></div>
+                <div class="choice"><input id="store-ok" name="store_profile" type="checkbox" value="yes" required><label for="store-ok">Store my card to match briefs</label></div>
+                <div class="choice"><input id="share-ok" name="share_card" type="checkbox" value="yes" required><label for="share-ok">You may send my card to a production for a specific job</label></div>
+                <div class="choice"><input id="photo-ok" name="photo_ok" type="checkbox" value="yes" required><label for="photo-ok">Photos I send are mine to use for casting</label></div>
+                <div class="choice"><input id="mkt-ok" name="marketing_opt_in" type="checkbox" value="yes"><label for="mkt-ok">Optional updates (not required)</label></div>
+              </div>
+            </fieldset>
+            <div class="honeypot" aria-hidden="true"><label for="talent-website">Leave empty</label><input id="talent-website" name="website" tabindex="-1" autocomplete="off"></div>
+            <p class="privacy-copy wide">Joining the book is not a booking. See the <a href="privacy/">privacy notice</a>.</p>
+          </section>
+          <section class="form-step" data-step="3" hidden>
+            <h3 class="wide">Review your card</h3>
+            <div class="wide"><ul class="review-list" id="talent-review"></ul><button class="button secondary small" id="talent-edit" type="button">Edit answers</button></div>
+          </section>
+          <div class="form-actions">
+            <button class="button secondary" id="talent-prev" type="button" hidden>Back</button>
+            <button class="button" id="talent-next" type="button">Continue</button>
+            <button class="button" id="talent-submit" type="submit" hidden>Join the book</button>
+          </div>
+          <div class="form-status" id="talent-status" role="status"></div>
+        </form>
+        <section class="health-summary" id="talent-done" tabindex="-1" hidden>
+          <p class="eyebrow">On the book</p>
+          <h2>Thank you - you are on the Runway book.</h2>
+          <div class="cards">
+            <article class="card"><h3>Your card</h3><ul class="summary-list" id="talent-summary"></ul></article>
+            <article class="card"><h3>What this is not</h3><p>This is not a job and not a promise of selection.</p></article>
+            <article class="card"><h3>Next step</h3><p>Send current photos on WhatsApp if you did not add a portfolio link.</p></article>
+          </div>
+          <button class="button" id="talent-wa-btn" type="button">Review this card in WhatsApp</button>
+        </section>
+      </div>
+    </div>
+  </section>
+  <section id="how-it-works">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">What happens next</p><h2>A clear path from brief to shortlist.</h2></div>
+      <div class="cards">
+        <article class="card"><h3>1. Submit</h3><p>Productions send a brief. Talent send a card.</p></article>
+        <article class="card"><h3>2. We confirm fit</h3><p>Dates, look, city and engagement type are checked before names move.</p></article>
+        <article class="card"><h3>3. Shortlist only</h3><p>The production receives the people Runway selects - not the whole database.</p></article>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><span>Runway - casting briefs and talent book</span><span><a href="privacy/">Privacy</a></span></div></footer>
+<button class="wa-float" id="open-whatsapp" type="button">WhatsApp Runway</button>
+<div class="dialog-backdrop" id="wa-backdrop" hidden>
+  <section class="dialog" id="wa-dialog" role="dialog" aria-modal="true" aria-labelledby="wa-title" tabindex="-1">
+    <header class="dialog-head"><h2 id="wa-title">Review before WhatsApp opens</h2><button class="dialog-close" id="close-whatsapp" type="button" aria-label="Close">x</button></header>
+    <div class="dialog-body">
+      <p>Nothing is sent automatically. Check the prepared note before pressing Send inside WhatsApp.</p>
+      <pre id="wa-preview" class="panel wa-preview"></pre>
+      <div class="form-actions">
+        <button class="button secondary" id="cancel-whatsapp" type="button">Cancel</button>
+        <button class="button" id="continue-whatsapp" type="button">Open WhatsApp to review</button>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="module" src="assets/js/public.js"></script>
+</body>
+</html>
