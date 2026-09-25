@@ -2,9 +2,9 @@ import { CONFIG } from './config.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const escapeHtml = (v) => String(v).replace(/[&<>'\"]/g, (c) => ({
-  '&': '&', '<': '<', '>': '>', \"'\": '&#39;', '\"': '"',
-}[c]));
+function escapeHtml(v) {
+  return String(v).replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"');
+}
 
 const labels = {
   commercial: 'Commercial', series: 'Series', film: 'Film', runway: 'Runway / fitting',
@@ -16,7 +16,7 @@ const labels = {
   month: 'This month', week: 'This week', asap: 'Shooting this week',
   email: 'Email', whatsapp: 'WhatsApp', conversation: 'Requested conversation',
   none: 'None', student: 'Student / training', extras: 'Booked extras',
-  some: 'Some — can describe', many: 'Many / a feature',
+  some: 'Some can describe', many: 'Many / a feature',
   weekdays: 'Weekdays', nights: 'Nights / weekends', last_minute: 'Last-minute',
   limited: 'Limited', sage: 'SAGE', yes: 'Yes', no: 'No',
 };
@@ -32,7 +32,7 @@ for (let i = 1; i <= 40; i += 1) {
   b.dataset.n = String(i);
   b.setAttribute('role', 'radio');
   b.setAttribute('aria-checked', 'false');
-  b.setAttribute('aria-label', `${i} ${i === 1 ? 'person' : 'people'}`);
+  b.setAttribute('aria-label', i + (i === 1 ? ' person' : ' people'));
   b.tabIndex = i === 1 ? 0 : -1;
   board.append(b);
   jacks.push(b);
@@ -45,15 +45,13 @@ function selectHeadcount(value, focus = false) {
     j.setAttribute('aria-checked', String(i === n - 1));
     j.tabIndex = i === n - 1 ? 0 : -1;
   });
-  $('#board-count').textContent = `${n} ${n === 1 ? 'person' : 'people'} selected`;
-  $('#selection-summary').textContent = `${n} ${n === 1 ? 'person is' : 'people are'} needed on set.`;
+  $('#board-count').textContent = n + (n === 1 ? ' person selected' : ' people selected');
+  $('#selection-summary').textContent = n + (n === 1 ? ' person is needed on set.' : ' people are needed on set.');
   const fit = $('#fit-message');
   fit.hidden = false;
-  fit.textContent = n < 3
-    ? 'Small cast — this brief will be reviewed as principal or featured work.'
-    : n >= 12
-      ? 'Large extra call — we will confirm holding area, wardrobe and call time separately.'
-      : 'This headcount is within the normal brief range.';
+  if (n < 3) fit.textContent = 'Small cast. This brief will be reviewed as principal or featured work.';
+  else if (n >= 12) fit.textContent = 'Large extra call. We will confirm holding, wardrobe and call time separately.';
+  else fit.textContent = 'This headcount is within the normal brief range.';
   headcount.value = String(n);
   $('#headcount-val').value = String(n);
   if (focus) jacks[n - 1].focus({ preventScroll: true });
@@ -81,7 +79,7 @@ headcount.addEventListener('input', () => {
 });
 
 function checked(name, root) {
-  return $$(`input[name="${name}"]:checked`, root).map((i) => i.value);
+  return $$('input[name="' + name + '"]:checked', root).map((i) => i.value);
 }
 
 function wizard(opts) {
@@ -130,7 +128,7 @@ function wizard(opts) {
     const status = $(opts.status);
     button.disabled = true;
     status.className = 'form-status';
-    status.textContent = 'Saving…';
+    status.textContent = 'Saving...';
     try {
       if (data.website) throw new Error('Unable to submit');
       await save(opts.kind, data);
@@ -206,7 +204,7 @@ function talentPayload() {
 }
 
 function rowsHtml(rows) {
-  return rows.map(([k, v]) => `<li><span>${k}</span>${escapeHtml(v)}</li>`).join('');
+  return rows.map(([k, v]) => '<li><span>' + k + '</span>' + escapeHtml(v) + '</li>').join('');
 }
 
 wizard({
@@ -218,10 +216,10 @@ wizard({
   renderReview() {
     const d = briefPayload();
     $('#brief-review').innerHTML = rowsHtml([
-      ['Contact', `${d.contact_name}, ${d.role} at ${d.company_name}`],
-      ['Project', `${human(d.project_type)} — ${d.working_title}`],
-      ['Where / when', `${d.city}, ${d.dates_notes}`],
-      ['Headcount', `${d.headcount} across ${d.location_count} location(s)`],
+      ['Contact', d.contact_name + ', ' + d.role + ' at ' + d.company_name],
+      ['Project', human(d.project_type) + ' - ' + d.working_title],
+      ['Where / when', d.city + ', ' + d.dates_notes],
+      ['Headcount', String(d.headcount) + ' across ' + String(d.location_count) + ' location(s)'],
       ['Engagement', human(d.pay_type)],
       ['Need', d.needs.map(human).join(', ') || 'None'],
       ['Look', d.look_description],
@@ -230,17 +228,17 @@ wizard({
   },
   renderDone(d) {
     $('#brief-summary').innerHTML = rowsHtml([
-      ['Project', `${human(d.project_type)} — ${d.working_title}`],
+      ['Project', human(d.project_type) + ' - ' + d.working_title],
       ['People', String(d.headcount)],
       ['Need', d.needs.map(human).join(', ') || 'To confirm'],
       ['Look', d.look_description],
     ]);
     const risks = [];
     if (d.pay_type !== 'paid') risks.push('Engagement type is not a confirmed paid booking.');
-    if (d.decision_timeline === 'asap') risks.push('Dates are tight — availability must be checked immediately.');
-    if (d.headcount >= 12) risks.push('Large call — holding, wardrobe and extras wrangling need confirmation.');
-    if (!d.look_description || d.look_description.length < 40) risks.push('Look is thin — we will ask for references.');
-    $('#brief-risks').innerHTML = (risks.length ? risks : ['Dates, look and usage still need confirmation.']).map((r) => `<li>${escapeHtml(r)}</li>`).join('');
+    if (d.decision_timeline === 'asap') risks.push('Dates are tight. Availability must be checked immediately.');
+    if (d.headcount >= 12) risks.push('Large call. Holding, wardrobe and extras wrangling need confirmation.');
+    if (!d.look_description || d.look_description.length < 40) risks.push('Look is thin. We will ask for references.');
+    $('#brief-risks').innerHTML = (risks.length ? risks : ['Dates, look and usage still need confirmation.']).map((r) => '<li>' + escapeHtml(r) + '</li>').join('');
   },
 });
 
@@ -253,10 +251,10 @@ wizard({
   renderReview() {
     const d = talentPayload();
     $('#talent-review').innerHTML = rowsHtml([
-      ['Name', d.preferred_name ? `${d.full_name} (${d.preferred_name})` : d.full_name],
+      ['Name', d.preferred_name ? d.full_name + ' (' + d.preferred_name + ')' : d.full_name],
       ['City', d.city],
       ['Books for', d.categories.map(human).join(', ')],
-      ['Age / presentation', `${d.age_band}, ${d.presentation}`],
+      ['Age / presentation', d.age_band + ', ' + d.presentation],
       ['Experience', human(d.experience_level)],
       ['Availability', human(d.availability)],
       ['Portfolio', d.portfolio_url || 'Will send photos'],
@@ -284,7 +282,7 @@ async function save(kind, data) {
   }
   const key = kind === 'brief' ? 'runwayBriefs' : 'runwayTalent';
   const existing = JSON.parse(localStorage.getItem(key) || '[]');
-  existing.push({ ...data, saved_at: new Date().toISOString() });
+  existing.push(Object.assign({}, data, { saved_at: new Date().toISOString() }));
   localStorage.setItem(key, JSON.stringify(existing));
   return { ok: true };
 }
@@ -292,16 +290,16 @@ async function save(kind, data) {
 function briefMessage(d) {
   return [
     'Runway casting brief',
-    `Contact: ${d.contact_name || ''} (${d.role || ''})`,
-    `Company: ${d.company_name || ''}`,
-    `Email: ${d.email || ''}`,
-    `Project: ${human(d.project_type)} — ${d.working_title || ''}`,
-    `City / dates: ${d.city || ''} / ${d.dates_notes || ''}`,
-    `Headcount: ${d.headcount}`,
-    `Engagement: ${human(d.pay_type)}`,
-    `Need: ${(d.needs || []).map(human).join(', ')}`,
-    `Look: ${d.look_description || ''}`,
-    `Timeline: ${human(d.decision_timeline)}`,
+    'Contact: ' + (d.contact_name || '') + ' (' + (d.role || '') + ')',
+    'Company: ' + (d.company_name || ''),
+    'Email: ' + (d.email || ''),
+    'Project: ' + human(d.project_type) + ' - ' + (d.working_title || ''),
+    'City / dates: ' + (d.city || '') + ' / ' + (d.dates_notes || ''),
+    'Headcount: ' + d.headcount,
+    'Engagement: ' + human(d.pay_type),
+    'Need: ' + (d.needs || []).map(human).join(', '),
+    'Look: ' + (d.look_description || ''),
+    'Timeline: ' + human(d.decision_timeline),
     '',
     'Please confirm the brief before sending a shortlist.',
   ].join('\n');
@@ -310,13 +308,13 @@ function briefMessage(d) {
 function talentMessage(d) {
   return [
     'Runway talent card',
-    `Name: ${d.full_name || ''}`,
-    `City: ${d.city || ''}`,
-    `Books for: ${(d.categories || []).map(human).join(', ')}`,
-    `Age band: ${d.age_band || ''}`,
-    `Experience: ${human(d.experience_level)}`,
-    `WhatsApp: ${d.whatsapp || ''}`,
-    `Portfolio: ${d.portfolio_url || 'Photos to follow'}`,
+    'Name: ' + (d.full_name || ''),
+    'City: ' + (d.city || ''),
+    'Books for: ' + (d.categories || []).map(human).join(', '),
+    'Age band: ' + (d.age_band || ''),
+    'Experience: ' + human(d.experience_level),
+    'WhatsApp: ' + (d.whatsapp || ''),
+    'Portfolio: ' + (d.portfolio_url || 'Photos to follow'),
     '',
     'Please add me to the Runway book. This is not a request for a specific job.',
   ].join('\n');
@@ -328,7 +326,7 @@ let returnFocus;
 let prepared = '';
 
 function last(key, fallback) {
-  try { return JSON.parse(sessionStorage.getItem(key)) || fallback(); } catch { return fallback(); }
+  try { return JSON.parse(sessionStorage.getItem(key)) || fallback(); } catch (e) { return fallback(); }
 }
 
 function openWa(trigger, text) {
@@ -343,14 +341,14 @@ function openWa(trigger, text) {
 function closeWa() {
   backdrop.hidden = true;
   document.body.classList.remove('dialog-open');
-  returnFocus?.focus();
+  if (returnFocus) returnFocus.focus();
   returnFocus = null;
 }
 
 $('#open-whatsapp').addEventListener('click', (e) => {
-  const brief = last('runwayLastBrief', () => null);
-  const talent = last('runwayLastTalent', () => null);
-  const text = brief ? briefMessage(brief) : talent ? talentMessage(talent) : 'Hi Runway — I would like to talk about a brief or joining the book.';
+  const brief = last('runwayLastBrief', function () { return null; });
+  const talent = last('runwayLastTalent', function () { return null; });
+  const text = brief ? briefMessage(brief) : talent ? talentMessage(talent) : 'Hi Runway. I would like to talk about a brief or joining the book.';
   openWa(e.currentTarget, text);
 });
 $('#brief-wa-btn').addEventListener('click', (e) => openWa(e.currentTarget, briefMessage(last('runwayLastBrief', briefPayload))));
@@ -364,9 +362,9 @@ $('#continue-whatsapp').addEventListener('click', () => {
     window.alert('Add your WhatsApp number in assets/js/config.js (whatsAppRecipient).');
     return;
   }
-  window.open(`https://wa.me/${n}?text=${encodeURIComponent(prepared)}`, '_blank', 'noopener');
+  window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(prepared), '_blank', 'noopener');
 });
- document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', (e) => {
   if (backdrop.hidden) return;
   if (e.key === 'Escape') { e.preventDefault(); closeWa(); }
 });
