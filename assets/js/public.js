@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { trackRunwayEvent } from './analytics.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -37,6 +38,7 @@ function show(i) {
   $('#brief-prev').hidden = current === 0;
   $('#brief-next').hidden = current === steps.length - 1;
   $('#brief-submit').hidden = current !== steps.length - 1;
+  trackRunwayEvent('brief_step_view', { metadata: { step: current + 1 } });
 }
 
 function valid() {
@@ -112,11 +114,13 @@ form.addEventListener('submit', async (e) => {
     $('#brief-done').hidden = false;
     $('#brief-summary').innerHTML = `<li><span>Title</span>${escapeHtml(d.working_title)}</li><li><span>City</span>${escapeHtml(d.city)}</li>`;
     status.textContent = '';
+    trackRunwayEvent('brief_submitted', { metadata: { project_type: d.project_type } });
   } catch (err) {
     console.error(err);
     status.className = 'form-status error';
     status.textContent = 'Could not save yet. Run db/010_runway.sql in Supabase, then retry. You can still use Members.';
     button.disabled = false;
+    trackRunwayEvent('brief_submit_failed');
   }
 });
 show(0);

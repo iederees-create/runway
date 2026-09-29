@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { trackRunwayEvent } from './analytics.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -61,6 +62,7 @@ async function ensureAccount(type, name) {
 }
 
 async function showApp(type) {
+  trackRunwayEvent('member_area_opened', { metadata: { account_type: type } });
   $('#gate').hidden = true;
   $('#signout').hidden = false;
   $('#who-label').textContent = type === 'agency' ? 'Agency desk' : 'Talent studio';
@@ -96,8 +98,10 @@ $('#auth-form').addEventListener('submit', async (e) => {
     sessionUser = data.user;
     const type = await ensureAccount($('#account-type').value, $('#display-name').value.trim());
     await showApp(type);
+    trackRunwayEvent('sign_in_succeeded', { metadata: { account_type: type } });
   } catch (err) {
     setStatus('#auth-status', err.message || 'Sign in failed', true);
+    trackRunwayEvent('sign_in_failed');
   }
 });
 
@@ -120,15 +124,19 @@ $('#do-signup').addEventListener('click', async () => {
       sessionUser = data.user;
       const type = await ensureAccount($('#account-type').value, $('#display-name').value.trim());
       await showApp(type);
+      trackRunwayEvent('account_created', { metadata: { account_type: type, signed_in: true } });
     } else {
       setStatus('#auth-status', 'Check your email to confirm the account, then sign in.');
+      trackRunwayEvent('account_created', { metadata: { confirmation_required: true } });
     }
   } catch (err) {
     setStatus('#auth-status', err.message || 'Could not create account', true);
+    trackRunwayEvent('account_create_failed');
   }
 });
 
 $('#signout').addEventListener('click', async () => {
+  await trackRunwayEvent('signed_out');
   await sb.auth.signOut();
   location.href = './';
 });
@@ -186,6 +194,7 @@ $('#talent-profile').addEventListener('submit', async (e) => {
   };
   const { error } = await sb.from('runway_talent').upsert(row, { onConflict: 'user_id' });
   setStatus('#talent-status', error ? `${error.message} — run db/010_runway.sql in Supabase` : 'Card saved.', Boolean(error));
+  trackRunwayEvent(error ? 'talent_card_save_failed' : 'talent_card_saved', { metadata: { listed: row.listed } });
 });
 
 async function loadTalentBookings() {
@@ -208,7 +217,8 @@ async function loadTalentBookings() {
     </article>`).join('') || '<p class="notice">No hold requests yet.</p>';
   $$('#talent-bookings button[data-id]').forEach((btn) => {
     btn.addEventListener('click', async () => {
-      await sb.from('runway_bookings').update({ status: btn.dataset.st }).eq('id', btn.dataset.id);
+      const { error } = await sb.from('runway_bookings').update({ status: btn.dataset.st }).eq('id', btn.dataset.id);
+      trackRunwayEvent(error ? 'booking_status_update_failed' : 'booking_status_updated', { metadata: { status: btn.dataset.st } });
       await loadTalentBookings();
     });
   });
@@ -265,6 +275,7 @@ async function loadBook() {
 }
 
 function openHold(id, name) {
+  trackRunwayEvent('hold_form_opened');
   holdTalent = { id, name };
   $('#hold-who').textContent = `Hold for ${name}`;
   $('#hold-title-input').value = '';
@@ -294,9 +305,11 @@ $('#hold-form').addEventListener('submit', async (e) => {
   });
   if (error) {
     setStatus('#hold-status', error.message, true);
+    trackRunwayEvent('hold_request_failed');
     return;
   }
   $('#hold-modal').hidden = true;
+  trackRunwayEvent('hold_requested');
   await loadAgencyBookings();
 });
 

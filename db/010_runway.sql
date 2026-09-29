@@ -129,3 +129,43 @@ grant select, insert, update on public.runway_talent to authenticated;
 grant insert on public.runway_briefs to anon, authenticated;
 grant select on public.runway_briefs to authenticated;
 grant select, insert, update on public.runway_bookings to authenticated;
+
+-- Privacy-conscious website activity. Never store form values, email
+-- addresses, phone numbers, or free-text submissions in this table.
+create table if not exists public.runway_events (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  session_id uuid not null,
+  event_name text not null check (char_length(event_name) between 1 and 80),
+  page_path text not null check (char_length(page_path) between 1 and 300),
+  target text check (target is null or char_length(target) <= 160),
+  referrer text check (referrer is null or char_length(referrer) <= 255),
+  screen_resolution text check (screen_resolution is null or char_length(screen_resolution) <= 32),
+  browser_language text check (browser_language is null or char_length(browser_language) <= 32),
+  duration_seconds int check (duration_seconds is null or duration_seconds between 0 and 86400),
+  utm_source text check (utm_source is null or char_length(utm_source) <= 120),
+  utm_medium text check (utm_medium is null or char_length(utm_medium) <= 120),
+  utm_campaign text check (utm_campaign is null or char_length(utm_campaign) <= 120),
+  metadata jsonb not null default '{}'::jsonb check (jsonb_typeof(metadata) = 'object' and pg_column_size(metadata) <= 4096)
+);
+
+create index if not exists runway_events_created_at_idx on public.runway_events (created_at desc);
+create index if not exists runway_events_name_created_at_idx on public.runway_events (event_name, created_at desc);
+create index if not exists runway_events_session_created_at_idx on public.runway_events (session_id, created_at desc);
+
+alter table public.runway_events enable row level security;
+
+drop policy if exists runway_events_insert on public.runway_events;
+create policy runway_events_insert on public.runway_events
+  for insert to anon, authenticated
+  with check (true);
+
+drop policy if exists runway_events_admin_read on public.runway_events;
+create policy runway_events_admin_read on public.runway_events
+  for select to authenticated
+  using (exists (select 1 from public.sf_site_admins a where a.user_id = (select auth.uid())));
+
+revoke all on public.runway_events from anon, authenticated;
+grant usage on sequence public.runway_events_id_seq to anon, authenticated;
+grant insert on public.runway_events to anon, authenticated;
+grant select on public.runway_events to authenticated;
